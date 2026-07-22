@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  password   String
+  name       String
+  memberships Membership[]
+  createdAt  DateTime    @default(now())
+}
+
+model Workspace {
+  id          Int          @id @default(autoincrement())
+  name        String
+  members     Membership[]
+  boards      Board[]
+  createdAt   DateTime     @default(now())
+}
+
+model Membership {
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
+  role        String    @default("member") // "owner" or "member"
+
+  @@unique([userId, workspaceId])
+}
+
+model Board {
+  id          Int       @id @default(autoincrement())
+  title       String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
+  lists       List[]
+  createdAt   DateTime  @default(now())
+}
+
+model List {
+  id       Int    @id @default(autoincrement())
+  title    String
+  position Int
+  board    Board  @relation(fields: [boardId], references: [id])
+  boardId  Int
+  cards    Card[]
+}
+
+model Card {
+  id       Int     @id @default(autoincrement())
+  title    String
+  position Int
+  list     List    @relation(fields: [listId], references: [id])
+  listId   Int
+  createdAt DateTime @default(now())
+}
