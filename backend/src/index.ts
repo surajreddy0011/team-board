@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth";
+import workspaceRoutes from "./routes/workspace";
+import boardRoutes from "./routes/boards";
 
 dotenv.config();
 
@@ -14,6 +16,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/workspaces", workspaceRoutes);
+app.use("/workspaces", boardRoutes);
 
 const PORT = 4000;
 app.listen(PORT, () => {
