@@ -2,7 +2,7 @@ import { Router } from "express";
 import { prisma } from "../prisma";
 import { requireAuth } from "../middleware/auth";
 import { userCanAccessBoard } from "../utils/checkAccess";
-
+import { io } from "../socket";
 const router = Router();
 
 // CREATE a card in a list
@@ -46,6 +46,7 @@ router.put("/cards/:cardId/move", requireAuth, async (req, res) => {
     });
   });
 
+  io.to(`board-${list.boardId}`).emit("card-moved", { cardId, listId, position });
   res.json({ message: "Moved" });
 });
 

@@ -1,4 +1,5 @@
 import express from "express";
+import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth";
@@ -6,6 +7,7 @@ import workspaceRoutes from "./routes/workspace";
 import boardRoutes from "./routes/boards";
 import listRoutes from "./routes/lists";
 import cardRoutes from "./routes/cards";
+import { setupSocket } from "./socket";
 
 dotenv.config();
 
@@ -23,7 +25,11 @@ app.use("/workspaces", boardRoutes);
 app.use("/", listRoutes);
 app.use("/", cardRoutes);
 
+// Socket.io needs a raw HTTP server to attach to — Express alone isn't enough
+const httpServer = http.createServer(app);
+setupSocket(httpServer);
+
 const PORT = 4000;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
