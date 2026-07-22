@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth";
 import workspaceRoutes from "./routes/workspace";
 import boardRoutes from "./routes/boards";
+import listRoutes from "./routes/lists";
+import cardRoutes from "./routes/cards";
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ app.get("/", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/workspaces", workspaceRoutes);
 app.use("/workspaces", boardRoutes);
+app.use("/", listRoutes);
+app.use("/", cardRoutes);
 
 const PORT = 4000;
 app.listen(PORT, () => {
