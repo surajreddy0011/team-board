@@ -74,7 +74,12 @@ function App() {
     );
   }
 
-  return <Dashboard token={token} />;
+  function logout() {
+    localStorage.removeItem("token");
+    setToken(null);
+  }
+
+  return <Dashboard token={token} onLogout={logout} />;
 }
 
 export default App;
