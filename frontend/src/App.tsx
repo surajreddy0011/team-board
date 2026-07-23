@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { login, signup, ApiError } from "./api";
+import Dashboard from "./Dashboard";
 
 function App() {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
@@ -73,7 +74,7 @@ function App() {
     );
   }
 
-  return <div className="p-8">Logged in! Board UI goes here next.</div>;
+  return <Dashboard token={token} />;
 }
 
 export default App;
